@@ -1,0 +1,19 @@
+{
+  "name": "facebook-marketplace-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Search Facebook Marketplace via Playwright and view results on a local dashboard",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "playwright:install": "npx playwright install chromium"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "playwright": "^1.49.0"
+  }
+}
