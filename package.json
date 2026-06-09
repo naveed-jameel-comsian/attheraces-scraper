@@ -5,7 +5,7 @@
   "description": "Search Facebook Marketplace via Playwright and view results on a local dashboard",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node index.js",
     "playwright:install": "npx playwright install chromium"
   },
   "engines": {
@@ -14,6 +14,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.0",
-    "playwright": "^1.49.0"
+    "playwright": "^1.49.0",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
