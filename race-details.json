@@ -1,0 +1,552 @@
+{
+  "scrapedAt": "2026-06-12T11:09:13.776Z",
+  "races": [
+    {
+      "url": "https://www.attheraces.com/racecard/Chester/12-June-2026/1330",
+      "raceId": "1596332",
+      "course": "Chester",
+      "date": "12-June-2026",
+      "distance": null,
+      "total_runners": 11,
+      "runners": [
+        {
+          "number": 1,
+          "draw": 5,
+          "rating": 56,
+          "starRating": 2,
+          "horse": {
+            "name": "Calyxoh",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133001.png?v=2"
+          },
+          "ageWeight": "4 11-2 p1",
+          "jockey": "Mr H C Swan",
+          "trainer": "P Morris"
+        },
+        {
+          "number": 2,
+          "draw": 10,
+          "rating": 56,
+          "starRating": 2,
+          "horse": {
+            "name": "Spirit Genie",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133002.png?v=2"
+          },
+          "ageWeight": "6 11-1 t p",
+          "jockey": "Mr Jamie Neild",
+          "trainer": "J Candlish"
+        },
+        {
+          "number": 3,
+          "draw": 4,
+          "rating": 64,
+          "starRating": 4,
+          "horse": {
+            "name": "King's School",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133003.png?v=2"
+          },
+          "ageWeight": "5 11-0 t p",
+          "jockey": "Miss Amy Collier",
+          "trainer": "G Tutty"
+        },
+        {
+          "number": 4,
+          "draw": 9,
+          "rating": 64,
+          "starRating": 5,
+          "horse": {
+            "name": "Lord Capulet",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133004.png?v=2"
+          },
+          "ageWeight": "4 10-13",
+          "jockey": "Mr Henry Callan",
+          "trainer": "K A Ryan"
+        },
+        {
+          "number": 5,
+          "draw": 3,
+          "rating": 59,
+          "starRating": 3,
+          "horse": {
+            "name": "Paws For Thought",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133005.png?v=2"
+          },
+          "ageWeight": "8 10-12",
+          "jockey": "Miss Lucy Turner",
+          "trainer": "D McCain Jnr"
+        },
+        {
+          "number": 6,
+          "draw": 2,
+          "rating": 60,
+          "starRating": 4,
+          "horse": {
+            "name": "Moon Beginnings",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133006.png?v=2"
+          },
+          "ageWeight": "4 10-11 p",
+          "jockey": "Mr Fletcher Yarham",
+          "trainer": "D Loughnane"
+        },
+        {
+          "number": 7,
+          "draw": 8,
+          "rating": 59,
+          "starRating": 3,
+          "horse": {
+            "name": "Kindest Nation",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133007.png?v=2"
+          },
+          "ageWeight": "5 10-11 v",
+          "jockey": "Miss Georgia King (5)",
+          "trainer": "H Palmer"
+        },
+        {
+          "number": 8,
+          "draw": 11,
+          "rating": 57,
+          "starRating": 3,
+          "horse": {
+            "name": "Be Frank",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133008.png?v=2"
+          },
+          "ageWeight": "6 10-9",
+          "jockey": "Mr Bradley Furniss (5)",
+          "trainer": "Ian Williams"
+        },
+        {
+          "number": 9,
+          "draw": 6,
+          "rating": 59,
+          "starRating": 3,
+          "horse": {
+            "name": "Mission Command",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133009.png?v=2"
+          },
+          "ageWeight": "4 10-7 t p",
+          "jockey": "Miss Amy Milburn (5)",
+          "trainer": "J Candlish"
+        },
+        {
+          "number": 10,
+          "draw": 7,
+          "rating": 57,
+          "starRating": 3,
+          "horse": {
+            "name": "Hectic",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133010.png?v=2"
+          },
+          "ageWeight": "6 10-5 p",
+          "jockey": "Miss Pippa Brown (3)",
+          "trainer": "L Bailey"
+        },
+        {
+          "number": 11,
+          "draw": 1,
+          "rating": 57,
+          "starRating": 3,
+          "horse": {
+            "name": "Maxi Boy",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs133011.png?v=2"
+          },
+          "ageWeight": "9 10-4",
+          "jockey": "Mr E Cagney",
+          "trainer": "Fionn McSharry"
+        }
+      ]
+    },
+    {
+      "url": "https://www.attheraces.com/racecard/Chester/12-June-2026/1402",
+      "raceId": "1596333",
+      "course": "Chester",
+      "date": "12-June-2026",
+      "distance": null,
+      "total_runners": 10,
+      "runners": [
+        {
+          "number": 1,
+          "draw": 3,
+          "rating": 61,
+          "starRating": 2,
+          "horse": {
+            "name": "Towelontheterrace",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140201.png?v=2"
+          },
+          "ageWeight": "2 9-7",
+          "jockey": "George Wood",
+          "trainer": "J Candlish"
+        },
+        {
+          "number": 2,
+          "draw": 10,
+          "rating": 86,
+          "starRating": 4,
+          "horse": {
+            "name": "Belardo Ace",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140202.png?v=2"
+          },
+          "ageWeight": "2 9-4",
+          "jockey": "Jason Watson",
+          "trainer": "A M Balding"
+        },
+        {
+          "number": 3,
+          "draw": 2,
+          "rating": 81,
+          "starRating": 2,
+          "horse": {
+            "name": "Harry's Pop",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140203.png?v=2"
+          },
+          "ageWeight": "2 9-4",
+          "jockey": "Pierre-Louis Jamin",
+          "trainer": "Dylan Cunha"
+        },
+        {
+          "number": 4,
+          "draw": 4,
+          "rating": 70,
+          "starRating": 2,
+          "horse": {
+            "name": "Zambezi Shark",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140204.png?v=2"
+          },
+          "ageWeight": "2 9-4",
+          "jockey": "Cieren Fallon",
+          "trainer": "S C Williams"
+        },
+        {
+          "number": 5,
+          "draw": 999,
+          "rating": 61,
+          "starRating": 2,
+          "horse": {
+            "name": "Isca Bay",
+            "silk": "https://www.attheraces.com/images/silks/nonrunner.png"
+          },
+          "ageWeight": "2 9-2",
+          "jockey": "Non Runner",
+          "trainer": "Craig Lidster"
+        },
+        {
+          "number": 6,
+          "draw": 7,
+          "rating": 92,
+          "starRating": 5,
+          "horse": {
+            "name": "Lady Branksome",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140206.png?v=2"
+          },
+          "ageWeight": "2 9-2",
+          "jockey": "Jason Hart",
+          "trainer": "M L W Bell"
+        },
+        {
+          "number": 7,
+          "draw": 6,
+          "rating": 70,
+          "starRating": 2,
+          "horse": {
+            "name": "Koodini",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140207.png?v=2"
+          },
+          "ageWeight": "2 9-1",
+          "jockey": "Rowan Scott",
+          "trainer": "H Palmer"
+        },
+        {
+          "number": 8,
+          "draw": 1,
+          "rating": 88,
+          "starRating": 4,
+          "horse": {
+            "name": "Metamouse",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140208.png?v=2"
+          },
+          "ageWeight": "2 9-1",
+          "jockey": "H Crouch",
+          "trainer": "D Loughnane"
+        },
+        {
+          "number": 9,
+          "draw": 9,
+          "rating": 78,
+          "starRating": 2,
+          "horse": {
+            "name": "Trust Havana",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140209.png?v=2"
+          },
+          "ageWeight": "2 8-10",
+          "jockey": "Gina Mangan",
+          "trainer": "G Hanmer"
+        },
+        {
+          "number": 10,
+          "draw": 5,
+          "rating": 44,
+          "starRating": 1,
+          "horse": {
+            "name": "Trust In Far",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs140210.png?v=2"
+          },
+          "ageWeight": "2 8-10",
+          "jockey": "Rose Dawes",
+          "trainer": "G Hanmer"
+        }
+      ]
+    },
+    {
+      "url": "https://www.attheraces.com/racecard/Chester/12-June-2026/1437",
+      "raceId": "1596334",
+      "course": "Chester",
+      "date": "12-June-2026",
+      "distance": null,
+      "total_runners": 9,
+      "runners": [
+        {
+          "number": 1,
+          "draw": 8,
+          "rating": 84,
+          "starRating": 1,
+          "horse": {
+            "name": "Valpovo",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143701.png?v=2"
+          },
+          "ageWeight": "3 9-9",
+          "jockey": "Gina Mangan",
+          "trainer": "Ian Williams"
+        },
+        {
+          "number": 2,
+          "draw": 2,
+          "rating": 94,
+          "starRating": 4,
+          "horse": {
+            "name": "Silver State",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143702.png?v=2"
+          },
+          "ageWeight": "3 9-9 v",
+          "jockey": "Rose Dawes (5)",
+          "trainer": "J Channon"
+        },
+        {
+          "number": 3,
+          "draw": 7,
+          "rating": 90,
+          "starRating": 3,
+          "horse": {
+            "name": "Colourband",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143703.png?v=2"
+          },
+          "ageWeight": "3 9-7",
+          "jockey": "Harry Davies",
+          "trainer": "S & E Crisford"
+        },
+        {
+          "number": 4,
+          "draw": 6,
+          "rating": 89,
+          "starRating": 3,
+          "horse": {
+            "name": "Mr Seagull",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143704.png?v=2"
+          },
+          "ageWeight": "3 9-6 p",
+          "jockey": "O J Orr",
+          "trainer": "H Palmer"
+        },
+        {
+          "number": 5,
+          "draw": 5,
+          "rating": 87,
+          "starRating": 3,
+          "horse": {
+            "name": "Magic Trip",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143705.png?v=2"
+          },
+          "ageWeight": "3 9-4 v1",
+          "jockey": "Jason Watson",
+          "trainer": "A M Balding"
+        },
+        {
+          "number": 6,
+          "draw": 9,
+          "rating": 91,
+          "starRating": 3,
+          "horse": {
+            "name": "Asia Force",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143706.png?v=2"
+          },
+          "ageWeight": "3 9-2",
+          "jockey": "Pierre-Louis Jamin",
+          "trainer": "K R Burke"
+        },
+        {
+          "number": 7,
+          "draw": 3,
+          "rating": 94,
+          "starRating": 3,
+          "horse": {
+            "name": "Simon Pierre",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143707.png?v=2"
+          },
+          "ageWeight": "3 9-1",
+          "jockey": "Joanna Mason",
+          "trainer": "G Tutty"
+        },
+        {
+          "number": 8,
+          "draw": 4,
+          "rating": 95,
+          "starRating": 5,
+          "horse": {
+            "name": "Morbeh",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143708.png?v=2"
+          },
+          "ageWeight": "3 9-0",
+          "jockey": "Cieren Fallon",
+          "trainer": "R Varian"
+        },
+        {
+          "number": 9,
+          "draw": 1,
+          "rating": 95,
+          "starRating": 4,
+          "horse": {
+            "name": "Home Hero",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs143709.png?v=2"
+          },
+          "ageWeight": "3 8-10",
+          "jockey": "Jason Hart",
+          "trainer": "H Palmer"
+        }
+      ]
+    },
+    {
+      "url": "https://www.attheraces.com/racecard/Chester/12-June-2026/1512",
+      "raceId": "1596335",
+      "course": "Chester",
+      "date": "12-June-2026",
+      "distance": null,
+      "total_runners": 9,
+      "runners": [
+        {
+          "number": 1,
+          "draw": 999,
+          "rating": 86,
+          "starRating": 4,
+          "horse": {
+            "name": "Cool Molly",
+            "silk": "https://www.attheraces.com/images/silks/nonrunner.png"
+          },
+          "ageWeight": "3 9-10",
+          "jockey": "Pierre-Louis Jamin",
+          "trainer": "Ollie Sangster"
+        },
+        {
+          "number": 2,
+          "draw": 5,
+          "rating": 88,
+          "starRating": 3,
+          "horse": {
+            "name": "Runswick",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs151202.png?v=2"
+          },
+          "ageWeight": "3 9-8",
+          "jockey": "Cieren Fallon",
+          "trainer": "E A L Dunlop"
+        },
+        {
+          "number": 3,
+          "draw": 8,
+          "rating": 90,
+          "starRating": 5,
+          "horse": {
+            "name": "Vidmiyr",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs151203.png?v=2"
+          },
+          "ageWeight": "3 9-7",
+          "jockey": "George Wood",
+          "trainer": "J Candlish"
+        },
+        {
+          "number": 4,
+          "draw": 2,
+          "rating": 84,
+          "starRating": 3,
+          "horse": {
+            "name": "Showcasing Star",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs151204.png?v=2"
+          },
+          "ageWeight": "3 9-6",
+          "jockey": "Jack Callan (3)",
+          "trainer": "C Johnston"
+        },
+        {
+          "number": 5,
+          "draw": 6,
+          "rating": 84,
+          "starRating": 3,
+          "horse": {
+            "name": "Dartrey",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs151205.png?v=2"
+          },
+          "ageWeight": "3 9-6",
+          "jockey": "H Crouch",
+          "trainer": "R M Beckett"
+        },
+        {
+          "number": 6,
+          "draw": 3,
+          "rating": 85,
+          "starRating": 3,
+          "horse": {
+            "name": "Norman Invasion",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs151206.png?v=2"
+          },
+          "ageWeight": "3 9-4 h",
+          "jockey": "George Downing",
+          "trainer": "E Walker"
+        },
+        {
+          "number": 7,
+          "draw": 9,
+          "rating": 91,
+          "starRating": 4,
+          "horse": {
+            "name": "Crazee Icon",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs151207.png?v=2"
+          },
+          "ageWeight": "3 9-1",
+          "jockey": "Jason Watson",
+          "trainer": "A M Balding"
+        },
+        {
+          "number": 8,
+          "draw": 4,
+          "rating": 89,
+          "starRating": 4,
+          "horse": {
+            "name": "Ubetterseethis",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs151208.png?v=2"
+          },
+          "ageWeight": "3 8-12",
+          "jockey": "Joanna Mason",
+          "trainer": "Craig Lidster"
+        },
+        {
+          "number": 9,
+          "draw": 1,
+          "rating": 81,
+          "starRating": 2,
+          "horse": {
+            "name": "Jackabi",
+            "silk": "https://www.attheraces.com/images/silks/20260612/20260612chs151209.png?v=2"
+          },
+          "ageWeight": "3 8-10 t1 h",
+          "jockey": "Ryan Kavanagh (5)",
+          "trainer": "Ian Williams"
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,7 @@
 {
-  "name": "facebook-marketplace-dashboard",
+  "name": "thread",
   "version": "1.0.0",
   "private": true,
-  "description": "Search Facebook Marketplace via Playwright and view results on a local dashboard",
-  "main": "server/index.js",
   "scripts": {
     "start": "node index.js",
     "playwright:install": "npx playwright install chromium"
@@ -12,10 +10,15 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@2captcha/captcha-solver": "^1.3.6",
+    "axios": "^1.17.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^4.21.0",
     "playwright": "^1.49.0",
     "playwright-extra": "^4.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "sharp": "^0.35.1",
+    "tesseract.js": "^7.0.0"
   }
 }

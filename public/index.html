@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scraper</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <!-- <h1>At The Races Scraper</h1>
+      <p class="subtitle">Scrape UK &amp; Ireland racecards by date</p> -->
+    </header>
+
+    <section class="card search-card">
+      <h2>New search</h2>
+      <form id="scrape-form" class="search-form">
+        <!-- <label for="date">Race date</label> -->
+        <input type="date" id="date" name="date" required>
+        <button type="submit" id="scrape-btn">Scrape</button>
+        <button type="button" id="stop-btn" class="btn-danger" hidden>Stop job</button>
+      </form>
+      <p id="status-msg" class="status-msg" hidden></p>
+      <div id="progress" class="progress" hidden>
+        <div class="progress-bar"><div id="progress-fill"></div></div>
+        <span id="progress-text"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-header">
+        <h2>Search history</h2>
+        <div class="section-actions">
+          <button type="button" id="refresh-btn" class="btn-secondary">Refresh</button>
+          <button type="button" id="clear-history-btn" class="btn-danger">Clear all</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Races</th>
+              <th>Runners</th>
+              <!-- <th>Started</th> -->
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="history-body">
+            <tr><td colspan="6" class="empty">No searches yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

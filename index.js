@@ -1,118 +1,288 @@
 const fs = require('fs');
 const path = require('path');
-const { chromium } = require('playwright-extra');
-const stealth = require('puppeteer-extra-plugin-stealth');
 
-chromium.use(stealth())
-
-const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+const express = require('express');
+const cors = require('cors');
+const { scrapeForDate, racesToCsv, cancelActiveScrape } = require('./scraper');
 
 const ROOT = path.join(__dirname, '.');
-const USER_DATA_DIR = path.join(ROOT, 'browser-data');
-const COOKIES_FILE = path.join(ROOT, 'cookies.json');
-const THREAD_TEXT = process.env.THREAD_TEXT || 'Hello from Threads!';
-console.log('User data dir:', COOKIES_FILE);
+const DATA_DIR = path.join(ROOT, 'data');
+const RESULTS_DIR = path.join(DATA_DIR, 'results');
+const HISTORY_FILE = path.join(DATA_DIR, 'history.json');
 
-let browserContextPromise = null;
+const PORT = process.env.PORT || 3000;
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-/** Playwright only accepts 'Strict' | 'Lax' | 'None' (Pascal case). */
-function normalizeSameSite(value) {
-  if (value === undefined || value === null || value === '') return 'Lax';
-  const s = String(value).trim();
-  if (s === 'Strict' || s === 'Lax' || s === 'None') return s;
-  const lower = s.toLowerCase();
-  if (lower === 'strict') return 'Strict';
-  if (lower === 'lax') return 'Lax';
-  if (lower === 'none' || lower === 'no_restriction') return 'None';
-  // Chrome / extensions sometimes export these
-  if (lower === 'unspecified' || lower === 'extended' || lower === 'moderate') return 'Lax';
-  return 'Lax';
+function ensureDataDirs() {
+    fs.mkdirSync(RESULTS_DIR, { recursive: true });
+    if (!fs.existsSync(HISTORY_FILE)) {
+        fs.writeFileSync(HISTORY_FILE, JSON.stringify({ searches: [] }, null, 2));
+    }
 }
 
-function normalizeCookies(raw) {
-  if (!Array.isArray(raw)) return [];
-  return raw.map((c) => {
-    const sameSite = normalizeSameSite(c.sameSite);
-    const secure = sameSite === 'None' ? true : c.secure !== false;
-    return {
-      name: c.name,
-      value: String(c.value ?? ''),
-      domain: c.domain || '.facebook.com',
-      path: c.path || '/',
-      expires: typeof c.expires === 'number' ? c.expires : -1,
-      httpOnly: Boolean(c.httpOnly),
-      secure,
-      sameSite,
-    };
-  });
+function readHistory() {
+    ensureDataDirs();
+    return JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8'));
 }
 
-async function loadCookiesIntoContext(context) {
-  if (!fs.existsSync(COOKIES_FILE)) return;
-  let parsed;
-  try {
-    parsed = JSON.parse(fs.readFileSync(COOKIES_FILE, 'utf8'));
-  } catch {
-    return;
-  }
-  const cookies = normalizeCookies(parsed);
-  if (cookies.length) await context.addCookies(cookies);
+function writeHistory(data) {
+    fs.writeFileSync(HISTORY_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
-function getContext() {
-  if (!browserContextPromise) {
-    browserContextPromise = (async () => {
-      const context = await chromium.launchPersistentContext(USER_DATA_DIR, {
-        headless: false,
-        args: ['--disable-blink-features=AutomationControlled'],
-        viewport: { width: 1280, height: 900 },
-      });
-      await loadCookiesIntoContext(context);
-      return context;
-    })();
-  }
-  return browserContextPromise;
+function resultPath(date) {
+    return path.join(RESULTS_DIR, `${date}.json`);
 }
 
-async function start() {
-  let page;
-
-  try {
-    const context = await getContext();
-    page = await context.newPage();
-    const url = "https://www.threads.com";
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await delay(6000);
-
-    const newThreadBtn = page.getByRole('button', { name: 'New thread' });
-    await newThreadBtn.waitFor({ state: 'visible', timeout: 15000 });
-    await newThreadBtn.click();
-
-    const composer = page.getByRole('textbox', { name: /Type to compose a new post/i });
-    await composer.waitFor({ state: 'visible', timeout: 15000 });
-    await composer.click();
-    await composer.pressSequentially(THREAD_TEXT, { delay: 50 });
-
-    const postBtn = page.getByRole('button', { name: 'Post', exact: true });
-    await postBtn.waitFor({ state: 'visible', timeout: 15000 });
-    await postBtn.click();
-    
-  } finally {
-    // if (page) await page.close().catch(() => {});
-    // await closeBrowser();
-  }
+function readResult(date) {
+    const file = resultPath(date);
+    if (!fs.existsSync(file)) return null;
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
+function saveResult(date, payload) {
+    fs.writeFileSync(
+        resultPath(date),
+        JSON.stringify({ scrapedAt: new Date().toISOString(), ...payload }, null, 2),
+        'utf8'
+    );
+}
 
-start().catch((err) => {
-  console.error('Error in marketplace script:', err);
-  process.exit(1);
+function upsertHistoryEntry(entry) {
+    const history = readHistory();
+    const idx = history.searches.findIndex((s) => s.date === entry.date);
+    if (idx >= 0) {
+        history.searches[idx] = { ...history.searches[idx], ...entry };
+    } else {
+        history.searches.unshift(entry);
+    }
+    writeHistory(history);
+    return entry;
+}
+
+let activeJob = null;
+let activeAbortController = null;
+
+function stopActiveJob() {
+    if (!activeJob) return false;
+    activeAbortController?.abort();
+    cancelActiveScrape();
+    return true;
+}
+
+function clearAllHistory() {
+    writeHistory({ searches: [] });
+    if (fs.existsSync(RESULTS_DIR)) {
+        for (const file of fs.readdirSync(RESULTS_DIR)) {
+            if (file.endsWith('.json')) {
+                fs.unlinkSync(path.join(RESULTS_DIR, file));
+            }
+        }
+    }
+}
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(ROOT, 'public')));
+
+app.get('/api/history', (_req, res) => {
+    const { searches } = readHistory();
+    res.json({ searches });
 });
 
-async function closeBrowser() {
-  if (browserContextPromise) {
-    const context = await browserContextPromise;
-    await context.close().catch(() => {});
-    browserContextPromise = null;
-  }
+app.get('/api/scrape/:date/status', (req, res) => {
+    const { date } = req.params;
+    if (!DATE_RE.test(date)) {
+        return res.status(400).json({ error: 'Invalid date. Use YYYY-MM-DD.' });
+    }
+
+    if (activeJob?.date === date) {
+        return res.json(activeJob);
+    }
+
+    const entry = readHistory().searches.find((s) => s.date === date);
+    if (entry) return res.json(entry);
+
+    res.status(404).json({ error: 'No scrape found for this date.' });
+});
+
+app.post('/api/scrape', async (req, res) => {
+    const date = req.body?.date?.trim();
+    if (!date || !DATE_RE.test(date)) {
+        return res.status(400).json({ error: 'Invalid date. Use YYYY-MM-DD.' });
+    }
+
+    if (activeJob) {
+        return res.status(409).json({
+            error: 'A scrape is already running.',
+            activeDate: activeJob.date,
+        });
+    }
+
+    const existing = readHistory().searches.find(
+        (s) => s.date === date && s.status === 'running'
+    );
+    if (existing) {
+        return res.status(409).json({ error: 'This date is already being scraped.' });
+    }
+
+    const startedAt = new Date().toISOString();
+    const abortController = new AbortController();
+    activeAbortController = abortController;
+    activeJob = {
+        date,
+        status: 'running',
+        startedAt,
+        progress: { phase: 'starting', message: 'Starting…' },
+        raceCount: 0,
+        runnerCount: 0,
+    };
+    upsertHistoryEntry(activeJob);
+
+    res.json({ ok: true, date, status: 'running' });
+
+    try {
+        const result = await scrapeForDate(date, {
+            signal: abortController.signal,
+            onProgress: (progress) => {
+                if (!activeJob) return;
+                activeJob.progress = progress;
+                if (progress.total != null) activeJob.raceCount = progress.total;
+            },
+            onRaceExtracted: (race, races) => {
+                const runnerCount = races.reduce(
+                    (sum, r) => sum + (r.runners?.length ?? 0),
+                    0
+                );
+                saveResult(date, {
+                    date,
+                    races,
+                    // raceCount: races.length,
+                    // runnerCount,
+                });
+                if (activeJob) {
+                    activeJob.runnerCount = runnerCount;
+                }
+                const label = race.course
+                    ? `${race.course} (${race.date || date})`
+                    : race.url;
+                console.log(
+                    `  [${races.length}] saved ${label} -> ${resultPath(date)}`
+                );
+            },
+        });
+
+        if (abortController.signal.aborted) return;
+
+        saveResult(date, result);
+
+        const completed = {
+            date,
+            status: 'completed',
+            startedAt,
+            completedAt: new Date().toISOString(),
+            raceCount: result.raceCount,
+            runnerCount: result.runnerCount,
+            progress: null,
+        };
+        upsertHistoryEntry(completed);
+    } catch (err) {
+        if (
+            abortController.signal.aborted ||
+            err.name === 'ScrapeCancelledError'
+        ) {
+            upsertHistoryEntry({
+                date,
+                status: 'cancelled',
+                startedAt,
+                completedAt: new Date().toISOString(),
+                error: 'Cancelled by user',
+                progress: null,
+            });
+        } else {
+            console.error(`Scrape failed for ${date}:`, err);
+            upsertHistoryEntry({
+                date,
+                status: 'failed',
+                startedAt,
+                completedAt: new Date().toISOString(),
+                error: err.message,
+                progress: null,
+            });
+        }
+    } finally {
+        activeJob = null;
+        activeAbortController = null;
+    }
+});
+
+app.post('/api/job/stop', (_req, res) => {
+    if (!activeJob) {
+        return res.status(404).json({ error: 'No running job.' });
+    }
+
+    const { date } = activeJob;
+    stopActiveJob();
+    res.json({ ok: true, date, status: 'cancelling' });
+});
+
+app.delete('/api/history', (_req, res) => {
+    const hadJob = stopActiveJob();
+    clearAllHistory();
+    activeJob = null;
+    activeAbortController = null;
+    res.json({ ok: true, stoppedJob: hadJob });
+});
+
+app.get('/api/results/:date', (req, res) => {
+    const { date } = req.params;
+    if (!DATE_RE.test(date)) {
+        return res.status(400).json({ error: 'Invalid date. Use YYYY-MM-DD.' });
+    }
+
+    const result = readResult(date);
+    if (!result) {
+        return res.status(404).json({ error: 'No results for this date.' });
+    }
+
+    res.json(result);
+});
+
+app.get('/api/download/:date.csv', (req, res) => {
+    const { date } = req.params;
+    if (!DATE_RE.test(date)) {
+        return res.status(400).json({ error: 'Invalid date. Use YYYY-MM-DD.' });
+    }
+
+    const result = readResult(date);
+    if (!result?.races?.length) {
+        return res.status(404).json({ error: 'No results to download for this date.' });
+    }
+
+    const csv = racesToCsv(result.races);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="attheraces-${date}.csv"`
+    );
+    res.send(csv);
+});
+
+ensureDataDirs();
+
+const twocaptchaKey = (
+    process.env.TWOCAPTCHA_API_KEY ||
+    process.env.TWO_CAPTCHA_API_KEY ||
+    process.env.CAPTCHA_2_API_KEY ||
+    ''
+).trim();
+if (!twocaptchaKey) {
+    console.warn(
+        'Warning: TWOCAPTCHA_API_KEY is not set — CAPTCHA solving will fail. Copy .env.example to .env and add your key.'
+    );
 }
+
+app.listen(PORT, () => {
+    console.log(`Dashboard: http://localhost:${PORT}`);
+});
