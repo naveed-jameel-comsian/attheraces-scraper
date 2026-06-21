@@ -26,8 +26,6 @@ Edit `.env`:
 TWOCAPTCHA_API_KEY=your_2captcha_api_key_here
 ```
 
-Get a key at [2captcha.com/enterpage](https://2captcha.com/enterpage).
-
 ## Start
 
 ```bash

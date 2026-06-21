@@ -140,6 +140,8 @@ app.post('/api/scrape', async (req, res) => {
     };
     upsertHistoryEntry(activeJob);
 
+    saveResult(date, { date, races: [], raceCount: 0, runnerCount: 0 });
+
     res.json({ ok: true, date, status: 'running' });
 
     try {
