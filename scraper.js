@@ -93,6 +93,16 @@ async function isFinishedRacePage(page) {
     });
 }
 
+/** True when the race has been abandoned (no runners/card to scrape). */
+async function isAbandonedRacePage(page) {
+    return page.evaluate(() => {
+        const status = document
+            .querySelector('#race-header-status')
+            ?.textContent?.trim();
+        return /^abandoned$/i.test(status || '');
+    });
+}
+
 /** True when the page is a jumps race rather than UK flat. */
 async function isJumpsRacePage(page) {
     return page.evaluate((jumpsPattern) => {
@@ -429,6 +439,7 @@ async function openUrlsOneByOne(page, urls, onProgress, signal, onRaceExtracted)
     const races = [];
     let skippedFinished = 0;
     let skippedJumps = 0;
+    let skippedAbandoned = 0;
     let skippedEmpty = 0;
 
     for (let i = 0; i < urls.length; i++) {
@@ -440,6 +451,13 @@ async function openUrlsOneByOne(page, urls, onProgress, signal, onRaceExtracted)
 
         await openRacePage(page, url, { onProgress });
         checkCancelled(signal);
+
+        if (await isAbandonedRacePage(page)) {
+            skippedAbandoned += 1;
+            console.log(`  Skipping abandoned race`);
+            await delay(PAGE_DELAY_MS);
+            continue;
+        }
 
         await page.waitForSelector('.card-body .card-entry', {
             state: 'attached',
@@ -486,6 +504,9 @@ async function openUrlsOneByOne(page, urls, onProgress, signal, onRaceExtracted)
     }
     if (skippedJumps > 0) {
         console.log(`Skipped ${skippedJumps} jumps race(s)`);
+    }
+    if (skippedAbandoned > 0) {
+        console.log(`Skipped ${skippedAbandoned} abandoned race(s)`);
     }
     if (skippedEmpty > 0) {
         console.log(`Skipped ${skippedEmpty} race(s) with no valid runners`);
