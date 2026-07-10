@@ -233,6 +233,20 @@ async function extractRacecardDetails(page, url) {
             return null;
         };
 
+        const parseDatasetNumber = (value) => {
+            if (value === undefined || value === '') return null;
+            const n = Number(value);
+            return Number.isFinite(n) ? n : null;
+        };
+
+        const parseRating = (entry) => {
+            const fromOr = parseOfficialRatingFromPill(
+                clean(entry.querySelector('.card-stats__or .text-pill'))
+            );
+            if (fromOr != null) return fromOr;
+            return parseDatasetNumber(entry.dataset.rating);
+        };
+
         const parseForm = (entry) => {
             const el = entry.querySelector('.card-form .card-form__stats');
             if (!el) return null;
@@ -316,12 +330,6 @@ async function extractRacecardDetails(page, url) {
             runner.lastRunPosition != null &&
             runner.daysSinceLastRun != null;
 
-        const parseDatasetNumber = (value) => {
-            if (value === undefined || value === '') return null;
-            const n = Number(value);
-            return Number.isFinite(n) ? n : null;
-        };
-
         const parseGoing = () => {
             const goingEl = document.querySelector(
                 '.race-header__details--secondary p.p--medium'
@@ -392,9 +400,7 @@ async function extractRacecardDetails(page, url) {
                 return {
                     number: parseDatasetNumber(entry.dataset.number),
                     draw: parseDatasetNumber(entry.dataset.draw),
-                    rating: parseOfficialRatingFromPill(
-                        clean(entry.querySelector('.card-stats__or .text-pill'))
-                    ),
+                    rating: parseRating(entry),
                     odds: parseOdds(entry, oddsByHorseId),
                     form,
                     lastRunPosition: parseLastRunPosition(form),
