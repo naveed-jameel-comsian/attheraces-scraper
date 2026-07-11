@@ -167,12 +167,6 @@ async function extractRacecardDetails(page, url) {
         state: 'attached',
         timeout: 30000,
     });
-    await page
-        .waitForSelector('.odds-grid__row--horse', {
-            state: 'attached',
-            timeout: 10000,
-        })
-        .catch(() => {});
 
     return page.evaluate((pageUrl) => {
         const clean = (el) =>
@@ -254,55 +248,6 @@ async function extractRacecardDetails(page, url) {
             return isValidFormString(form) ? form : null;
         };
 
-        const parseHorseId = (horseLink) => {
-            const href = horseLink?.getAttribute('href') || '';
-            return href.match(/\/(\d+)(?:\?|$)/)?.[1] ?? null;
-        };
-
-        const fractionToDecimal = (fraction) => {
-            if (!fraction) return null;
-            const normalised = fraction.trim().toLowerCase();
-            if (normalised === 'sp' || normalised === 'nr' || normalised === '-') {
-                return null;
-            }
-            if (normalised === 'evs' || normalised === 'evens') return 2;
-            const match = normalised.match(/^(\d+)\s*\/\s*(\d+)$/);
-            if (!match) return null;
-            return Number(match[1]) / Number(match[2]) + 1;
-        };
-
-        const pickBestFractionalOdds = (fractions) => {
-            const prices = [...new Set(fractions.map((f) => f.trim()).filter(Boolean))];
-            const available = prices.filter(
-                (price) => price !== 'SP' && price !== '-' && price !== 'N/A'
-            );
-            if (available.length === 0) {
-                return prices.includes('SP') ? 'SP' : null;
-            }
-            return available.sort(
-                (a, b) => (fractionToDecimal(b) ?? 0) - (fractionToDecimal(a) ?? 0)
-            )[0];
-        };
-
-        const buildOddsByHorseId = () => {
-            const oddsByHorseId = new Map();
-            for (const row of document.querySelectorAll('.odds-grid__row--horse')) {
-                const horseId = row.id?.replace(/^row-/, '');
-                if (!horseId) continue;
-                const fractions = [
-                    ...row.querySelectorAll('.odds-value--fraction'),
-                ].map((el) => el.textContent.trim());
-                oddsByHorseId.set(horseId, pickBestFractionalOdds(fractions));
-            }
-            return oddsByHorseId;
-        };
-
-        const parseOdds = (entry, oddsByHorseId) => {
-            const horseId = parseHorseId(entry.querySelector('.horse__link'));
-            if (!horseId) return null;
-            return oddsByHorseId.get(horseId) ?? null;
-        };
-
         const parseDaysSinceLastRun = (entry) => {
             for (const span of entry.querySelectorAll(
                 '.horse__details > .p--x-small'
@@ -322,13 +267,6 @@ async function extractRacecardDetails(page, url) {
                 '';
             return /nonrunner/i.test(silk);
         };
-
-        const hasRequiredRunnerFields = (runner) =>
-            runner.draw != null &&
-            runner.rating != null &&
-            runner.form &&
-            runner.lastRunPosition != null &&
-            runner.daysSinceLastRun != null;
 
         const parseGoing = () => {
             const goingEl = document.querySelector(
@@ -388,7 +326,6 @@ async function extractRacecardDetails(page, url) {
         const cardWrapper =
             document.querySelector('.card__content .card-wrapper') ||
             document.querySelector('.card-wrapper');
-        const oddsByHorseId = buildOddsByHorseId();
         const runners = [
             ...(cardWrapper?.querySelectorAll('.card-body .card-entry') || []),
         ]
@@ -401,7 +338,6 @@ async function extractRacecardDetails(page, url) {
                     number: parseDatasetNumber(entry.dataset.number),
                     draw: parseDatasetNumber(entry.dataset.draw),
                     rating: parseRating(entry),
-                    odds: parseOdds(entry, oddsByHorseId),
                     form,
                     lastRunPosition: parseLastRunPosition(form),
                     daysSinceLastRun: parseDaysSinceLastRun(entry),
@@ -419,8 +355,7 @@ async function extractRacecardDetails(page, url) {
                         entry.querySelector('a[href*="/trainer/"] .icon-text__t')
                     ),
                 };
-            })
-            .filter(hasRequiredRunnerFields);
+            });
 
         return {
             url: pageUrl,
@@ -604,7 +539,6 @@ function racesToCsv(races) {
         'number',
         'draw',
         'rating',
-        'odds',
         'form',
         'lastRunPosition',
         'daysSinceLastRun',
@@ -631,7 +565,6 @@ function racesToCsv(races) {
                 runner.number,
                 runner.draw,
                 runner.rating,
-                runner.odds,
                 runner.form,
                 runner.lastRunPosition,
                 runner.daysSinceLastRun,
